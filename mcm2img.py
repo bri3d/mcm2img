@@ -2,7 +2,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 from sys import argv
 
-out = Image.new("RGBA", (3072, 18), (0, 0, 0, 0))
+out = Image.new("RGBA", (12, 4608), (0, 0, 0, 0))
 draw = ImageDraw.Draw(out)
 char = 0
 x = 0
@@ -24,13 +24,13 @@ with open(argv[1]) as f:
             continue
         for pixel in (line[i:i+2] for i in range(0, len(line), 2)):
             if pixel == "00": # Black
-                draw.point((x + (char * 12), y), (0, 0, 0, 255))
+                draw.point((x ,y + (char * 18)), (0, 0, 0, 255))
             if pixel == "01": # Transparent
-                draw.point((x + (char * 12), y), (0, 0, 0, 0))
+                draw.point((x ,y + (char * 18)), (0, 0, 0, 0))
             if pixel == "10": # White
-                draw.point((x + (char * 12), y), (255, 255, 255, 255))
+                draw.point((x, y + (char * 18)), (255, 255, 255, 255))
             if pixel == "11": # Transparent + White
-                draw.point((x + (char * 12), y), (255, 255, 255, 0))
+                draw.point((x, y + (char * 18)), (255, 255, 255, 0))
             x += 1
             if x == 12:
                 y += 1
@@ -39,7 +39,9 @@ with open(argv[1]) as f:
                 skip = 10
                 char += 1
                 y = 0
-          
+
+out = out.resize((36, 13824), Image.NEAREST)
+
 if len(argv) > 3:
     Path(argv[2]).write_bytes(out.tobytes('raw',argv[3]))
 else:
