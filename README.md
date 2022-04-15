@@ -8,6 +8,8 @@ Useful for: previewing fonts, converting fonts for use in other applications, et
 
 # Use
 
-python3 mcm2img.py mcmfile.mcm imagefile.fmt [rawfmt]
+python3 mcm2img.py mcmfile.mcm imagefile.fmt [rawfmt] [R] [G] [B]
+eg : python3 mcm2img.py mcmfile.mcm imagefile.fmt [rawfmt] 0 255 0 for green font colour
+
 
 if rawfmt is specified, it's one of the (many) raw bitmap formats supported by Pillow: https://github.com/python-pillow/Pillow/blob/main/src/libImaging/Unpack.c#L1483 . RGBA is probably the most common thing you will want here.
