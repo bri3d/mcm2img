@@ -9,6 +9,15 @@ x = 0
 y = 0
 skip = 0
 
+if len(argv) > 6:
+    font_r = int(argv[4])
+    font_g = int(argv[5])
+    font_b = int(argv[6])
+else:
+    font_r = int(255)
+    font_g = int(255)
+    font_b = int(255)
+
 # This image format is really simple. It's binary-coded-ASCII (i.e., ASCII line `01100110` translates directly to a byte with these bit values). Each 2-bit nibble represents a pixel value.
 # Instead of doing a lot of gymnastics to turn the ASCII to bytes and run through the bytes, it's easier to just read the ASCII pixel values directly and draw them into an image canvas.
 # Each character is 12x18 characters, meaning 216 nibbles or 54 bytes (lines). But the MAX7456 memory is 64-byte aligned, so 10 bytes (lines) are wasted after each character.
@@ -28,9 +37,9 @@ with open(argv[1]) as f:
             if pixel == "01": # Transparent
                 draw.point((x ,y + (char * 18)), (0, 0, 0, 0))
             if pixel == "10": # White
-                draw.point((x, y + (char * 18)), (255, 255, 255, 255))
+                draw.point((x, y + (char * 18)), (font_r, font_g, font_b, 255))
             if pixel == "11": # Transparent + White
-                draw.point((x, y + (char * 18)), (255, 255, 255, 0))
+                draw.point((x, y + (char * 18)), (font_r, font_g, font_b, 0))
             x += 1
             if x == 12:
                 y += 1
