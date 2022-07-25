@@ -1,0 +1,53 @@
+---
+name: fonts
+
+on: push
+
+jobs:
+  fonts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Clone betaflight configurator
+        uses: GuillaumeFalourd/clone-github-repo-action@v2
+        with:
+          owner: 'betaflight'
+          repository: 'betaflight-configurator'
+      - name: Clone iNav configurator
+        uses: GuillaumeFalourd/clone-github-repo-action@v2
+        with:
+          owner: 'iNavFlight'
+          repository: 'inav-configurator'
+      - name: copy fonts
+        run: |
+          mkdir -p ./fonts/{betaflight,inav}
+          find betaflight-configurator -iname \*.mcm -exec cp -v {} ./fonts/betaflight/ \;
+          find inav-configurator -iname \*.mcm -exec cp -v {} ./fonts/inav/ \;
+      - uses: addnab/docker-run-action@v3
+        with:
+          registry: hub.docker.com
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/mcm2img:latest
+          options: -v ${{ github.workspace }}/fonts:/app/fonts
+          run: bash /app/entrypoint.sh
+      - name: copy bins
+        run: |
+          mkdir -p ./dist/{betaflight,inav}
+          find ./fonts/betaflight -type f -iname \*.bin -exec cp -v {} ./dist/betaflight/ \;
+          find ./fonts/inav -type f -iname \*.bin -exec cp -v {} ./dist/inav/ \;
+          find ./dist -type f -ls
+          tar cfvz mcm2img-fonts.tar.gz dist
+      - name: archive tarball
+        uses: actions/upload-artifact@v3
+        with:
+          name: mcm2img-fonts
+          path: |
+            dist
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            mcm2img-fonts.tar.gz

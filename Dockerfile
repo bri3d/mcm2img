@@ -1,7 +1,8 @@
 FROM alpine:3.15
 
 RUN mkdir m 0750 -p /app/fonts && \
-  apk add python3 py3-pillow bash
+  apk add --update-cache python3 py3-pillow bash && \
+  rm -rf /var/cache/apk/*
 
 COPY ./mcm2img.py /app/mcm2img.py
 COPY ./entrypoint.sh /app/entrypoint.sh
