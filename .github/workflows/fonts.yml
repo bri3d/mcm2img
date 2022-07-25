@@ -21,11 +21,17 @@ jobs:
         with:
           owner: 'iNavFlight'
           repository: 'inav-configurator'
+      - name: Clone iNav configurator
+        uses: GuillaumeFalourd/clone-github-repo-action@v2
+        with:
+          owner: 'ArduPilot'
+          repository: 'ArduConfigurator'
       - name: copy fonts
         run: |
-          mkdir -p ./fonts/{betaflight,inav}
+          mkdir -p ./fonts/{betaflight,inav,ardupilot}
           find betaflight-configurator -iname \*.mcm -exec cp -v {} ./fonts/betaflight/ \;
           find inav-configurator -iname \*.mcm -exec cp -v {} ./fonts/inav/ \;
+          find ArduConfigurator -iname \*.mcm -exec cp -v {} ./fonts/ardupilot/ \;
       - uses: addnab/docker-run-action@v3
         with:
           registry: hub.docker.com
@@ -34,9 +40,10 @@ jobs:
           run: bash /app/entrypoint.sh
       - name: copy bins
         run: |
-          mkdir -p ./dist/{betaflight,inav}
+          mkdir -p ./dist/{betaflight,inav.ardupilot}
           find ./fonts/betaflight -type f -iname \*.bin -exec cp -v {} ./dist/betaflight/ \;
           find ./fonts/inav -type f -iname \*.bin -exec cp -v {} ./dist/inav/ \;
+          find ./fonts/ardupilot -type f -iname \*.bin -exec cp -v {} ./dist/ardupilot/ \;
           find ./dist -type f -ls
           tar cfvz mcm2img-fonts.tar.gz dist
       - name: archive tarball
