@@ -21,7 +21,7 @@ jobs:
         with:
           owner: 'iNavFlight'
           repository: 'inav-configurator'
-      - name: Clone iNav configurator
+      - name: Clone ArduPilot configurator
         uses: GuillaumeFalourd/clone-github-repo-action@v2
         with:
           owner: 'ArduPilot'
