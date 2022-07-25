@@ -43,7 +43,7 @@ jobs:
           run: bash /app/entrypoint.sh
       - name: copy bins
         run: |
-          mkdir -p ./dist/{betaflight,inav.ardupilot}
+          mkdir -p ./dist/{betaflight,inav,ardupilot}
           find ./fonts/betaflight -type f -iname \*.bin -exec cp -v {} ./dist/betaflight/ \;
           find ./fonts/inav -type f -iname \*.bin -exec cp -v {} ./dist/inav/ \;
           find ./fonts/ardupilot -type f -iname \*.bin -exec cp -v {} ./dist/ardupilot/ \;
