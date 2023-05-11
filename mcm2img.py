@@ -40,11 +40,11 @@ with open(argv[1]) as f:
             continue
         for pixel in (line[i:i+2] for i in range(0, len(line), 2)):
             if pixel == "00": # Black
-                draw.point((x ,y + (char * char_height)), (0, 0, 0, 255))
+                draw.point((x ,y + (char * char_height)), (0, 0, 0, 150))
             if pixel == "01": # Transparent
                 draw.point((x ,y + (char * char_height)), (0, 0, 0, 0))
             if pixel == "10": # White
-                draw.point((x, y + (char * char_height)), (font_r, font_g, font_b, 255))
+                draw.point((x, y + (char * char_height)), (font_r, font_g, font_b, 150))
             if pixel == "11": # Transparent + White
                 draw.point((x, y + (char * char_height)), (font_r, font_g, font_b, 0))
             x += 1
@@ -66,6 +66,8 @@ out2_hd = font2.resize((char_width * resize_factor, char_height * chars_per_page
 resize_factor = 3
 out1 = font1.resize((char_width * resize_factor, char_height * chars_per_page * resize_factor), Image.NEAREST)
 out2 = font2.resize((char_width * resize_factor, char_height * chars_per_page * resize_factor), Image.NEAREST)
+
+out1.save("font1.png")
 
 if len(argv) > 3:
     Path(argv[2] + "_hd.bin").write_bytes(out1_hd.tobytes('raw',argv[3]))
