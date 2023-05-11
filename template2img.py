@@ -14,7 +14,7 @@ SRC_SCALE_FACTOR = 3
 CHAR_WIDTH_PX = CHAR_WIDTH * SRC_SCALE_FACTOR
 CHAR_HEIGHT_PX = CHAR_HEIGHT * SRC_SCALE_FACTOR
 
-DST_PAGES = 2
+DST_PAGES = 1
 DST_HD_SCALE_FACTOR = 2 / 3
 DST_CHAR_COUNT = CHAR_COUNT_X * CHAR_COUNT_Y * DST_PAGES
 
@@ -47,6 +47,14 @@ def main():
             dst_img.paste(char_img, (0, (j * CHAR_COUNT_Y + i) * CHAR_HEIGHT_PX))
 
     dst_img.save("font_all.png")
+    dst_img_hd = dst_img.resize(
+        (
+            int(dst_img.width * DST_HD_SCALE_FACTOR),
+            int(dst_img.height * DST_HD_SCALE_FACTOR),
+        ),
+        Image.Resampling.LANCZOS,
+    )
+    dst_img_hd.save("font_all_hd.png")
 
     for i in range(DST_PAGES):
         page_img = dst_img.crop(
@@ -71,10 +79,10 @@ def main():
         else:
             suffix = ""
 
-        page_img.save(f"font{suffix}.png")
-        page_img_hd.save(f"font_hd{suffix}.png")
-        Path(f"font{suffix}.bin").write_bytes(page_img.tobytes("raw", "RGBA"))
-        Path(f"font_hd{suffix}.bin").write_bytes(page_img_hd.tobytes("raw", "RGBA"))
+        page_img.save(f"user_bf_36.png")
+        page_img_hd.save(f"user_bf_24.png")
+        Path(f"font_bf{suffix}.bin").write_bytes(page_img.tobytes("raw", "RGBA"))
+        Path(f"font_bf_hd{suffix}.bin").write_bytes(page_img_hd.tobytes("raw", "RGBA"))
 
 
 if __name__ == "__main__":
